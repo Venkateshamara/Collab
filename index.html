@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Calculator & Money Converter</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f7f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 30px;
+      gap: 30px;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      width: 300px;
+    }
+    .card h2 {
+      text-align: center;
+      color: #34495e;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      border: none;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .result {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+
+  <header>Web Dashboard: Calculator & Money Converter</header>
+
+  <div class="container">
+
+    <!-- Basic Calculator -->
+    <div class="card">
+      <h2>Calculator</h2>
+      <input type="number" id="calcNum1" placeholder="Enter first number">
+      <input type="number" id="calcNum2" placeholder="Enter second number">
+      <select id="calcOperation">
+        <option value="add">Add (+)</option>
+        <option value="subtract">Subtract (-)</option>
+        <option value="multiply">Multiply (×)</option>
+        <option value="divide">Divide (÷)</option>
+      </select>
+      <button onclick="calculate()">Calculate</button>
+      <div class="result" id="calcResult"></div>
+    </div>
+
+    <!-- Currency Converter -->
+    <div class="card">
+      <h2>Money Converter</h2>
+      <input type="number" id="amount" placeholder="Enter amount">
+      <select id="fromCurrency">
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+      </select>
+      <select id="toCurrency">
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+      </select>
+      <button onclick="convertCurrency()">Convert</button>
+      <div class="result" id="convertResult"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // Basic Calculator Logic
+    function calculate() {
+      const num1 = parseFloat(document.getElementById('calcNum1').value);
+      const num2 = parseFloat(document.getElementById('calcNum2').value);
+      const operation = document.getElementById('calcOperation').value;
+      let result = '';
+
+      if (isNaN(num1) || isNaN(num2)) {
+        result = "Please enter valid numbers.";
+      } else {
+        switch(operation) {
+          case 'add': result = num1 + num2; break;
+          case 'subtract': result = num1 - num2; break;
+          case 'multiply': result = num1 * num2; break;
+          case 'divide':
+            result = num2 !== 0 ? (num1 / num2) : "Cannot divide by zero";
+            break;
+        }
+      }
+      document.getElementById('calcResult').innerText = "Result: " + result;
+    }
+
+    // Currency Converter Logic (Static Rates)
+    const exchangeRates = {
+      USD: { USD: 1, EUR: 0.85, GBP: 0.75 },
+      EUR: { USD: 1.18, EUR: 1, GBP: 0.88 },
+      GBP: { USD: 1.33, EUR: 1.14, GBP: 1 }
+    };
+
+    function convertCurrency() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      const from = document.getElementById('fromCurrency').value;
+      const to = document.getElementById('toCurrency').value;
+
+      if (isNaN(amount)) {
+        document.getElementById('convertResult').innerText = "Enter a valid amount.";
+        return;
+      }
+
+      const rate = exchangeRates[from][to];
+      const converted = amount * rate;
+
+      document.getElementById('convertResult').innerText =
+        `${amount} ${from} = ${converted.toFixed(2)} ${to}`;
+    }
+  </script>
+
+</body>
+</html>
